@@ -10,10 +10,10 @@
               <span class="lot__amount">
                 <?=($lot['bets'] == 0)?('Стартовая цена'):$lot['bets'].' '.get_noun_plural_form($lot['bets'], 'ставка', 'ставки', 'ставок')?>
                 </span>
-              <span class="lot__cost"><?=$lot['price'];?><b class="rub">р</b></span>
+              <span class="lot__cost"><?=format_price($lot['price']);?></span>
             </div>
             <div class="lot__timer timer <?=($lot['timer--finishing'])?('timer--finishing'):('');?>">
-            <?=$lot['time'];?>
+            <?=time_diff($lot['date']);?>
             </div>
           </div>
         </div>
