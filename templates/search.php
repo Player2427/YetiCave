@@ -5,7 +5,7 @@
         <h2>Результаты поиска по запросу «<span>Union</span>»</h2>
         <ul class="lots__list">
         <?php foreach ($lots as $key => $lot): ?>
-          <?=include_template('blocks/lot.php', ['lot' => $lot])?>
+          <?=include_template('blocks/lot.php', ['lot' => $lot, 'key' => $key])?>
         <?php endforeach; ?>
         </ul>
       </section>

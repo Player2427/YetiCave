@@ -1,6 +1,10 @@
 <?php
 if (!empty($_GET)) {
     if (isset($_GET['page'])) $_SESSION['page'] = $_GET['page'];
+    if (isset($_GET['lot'])) {
+        $_SESSION['key'] = $_GET['lot'];
+        if (!isset($lots[$_SESSION['key']])) $_SESSION['page'] = '404';;
+    };
     header('Location: index.php');
     exit();
 } else {
@@ -37,6 +41,8 @@ switch ($_SESSION['page']) {
         $page = 'lot';
         // Тайтл и другие переменные для страницы лота следует брать из базы данных
         $title = 'DC Ply Mens 2016/2017 Snowboard';
+        if (isset($_SESSION['key'])) $lot = $lots[$_SESSION['key']];
+        unset($_SESSION['key']);
         break;
         
     case 'search':
@@ -56,12 +62,12 @@ switch ($_SESSION['page']) {
         $title = 'Страницы не существует';
         break;
 }
-if ($page != 'index')
-    $nav = include_template('blocks/nav.php', ['category' => $category]);
+if ($page != 'index') $nav = include_template('blocks/nav.php', ['category' => $category]);
 $content = include_template("$page.php", [
     'title' => $title,
     'nav' => $nav,
     'category' => $category,
     'lots' => $lots,
+    'lot' => $lot,
 ]);
 unset($_SESSION['page']);
