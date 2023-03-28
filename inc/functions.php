@@ -14,5 +14,9 @@ function time_diff($two) {
     $min = sprintf("%02d", floor(($diff % 3600) / 60));
     $s = sprintf("%02d", $diff % 60);
     return "$h:$min:$s";
-    }
+}
+
+function hsc($input) {
+    return htmlspecialchars(trim($input));
+}
 ?>

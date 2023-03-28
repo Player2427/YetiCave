@@ -40,8 +40,13 @@ switch ($_SESSION['page']) {
     case 'lot':
         $page = 'lot';
         // Тайтл и другие переменные для страницы лота следует брать из базы данных
-        $title = 'DC Ply Mens 2016/2017 Snowboard';
-        if (isset($_SESSION['key'])) $lot = $lots[$_SESSION['key']];
+        if (isset($_SESSION['key'])) {
+            $title = $lots[$_SESSION['key']]['name'];
+            $lot = $lots[$_SESSION['key']];
+        } else {
+            $title = $_SESSION['new-lot']['lot-name'];
+            $lot = $_SESSION['new-lot'];
+        }
         unset($_SESSION['key']);
         break;
         
@@ -70,4 +75,4 @@ $content = include_template("$page.php", [
     'lots' => $lots,
     'lot' => $lot,
 ]);
-unset($_SESSION['page']);
+// unset($_SESSION['page']);
