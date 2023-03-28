@@ -37,6 +37,11 @@ switch ($_SESSION['page']) {
         $title = 'Все лоты';
         break;
 
+    case 'history':
+        $page = 'history';
+        $title = 'История просмотров';
+        break;
+
     case 'lot':
         $page = 'lot';
         // Тайтл и другие переменные для страницы лота следует брать из базы данных
@@ -47,7 +52,6 @@ switch ($_SESSION['page']) {
             $title = $_SESSION['new-lot']['lot-name'];
             $lot = $_SESSION['new-lot'];
         }
-        unset($_SESSION['key']);
         break;
         
     case 'search':

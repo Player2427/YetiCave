@@ -6,6 +6,7 @@ require_once('inc/data.php');
 require_once('inc/page.php');
 date_default_timezone_set("Europe/Moscow");
 $is_auth = rand(0, 1);
+
 $html = include_template('layout.php', [
     'category' => $category,
     'content' => $content,
