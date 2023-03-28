@@ -31,6 +31,10 @@ switch ($_SESSION['page']) {
         $page = 'login';
         $title = 'Вход';
         break;
+        
+    case 'logout':
+        $page = 'logout';
+        break;
 
     case 'all-lots':
         $page = 'all-lots';
@@ -51,6 +55,7 @@ switch ($_SESSION['page']) {
         } else {
             $title = $_SESSION['new-lot']['lot-name'];
             $lot = $_SESSION['new-lot'];
+            unset($_SESSION['new-lot']);
         }
         break;
         

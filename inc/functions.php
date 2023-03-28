@@ -19,4 +19,13 @@ function time_diff($two) {
 function hsc($input) {
     return htmlspecialchars(trim($input));
 }
+function searchUserByEmail($email, $users) {
+    $result = null;
+    foreach ($users as $key => $user) {
+        if ($user['email'] === $email) 
+        $result = $user;
+        break;
+    }
+    return $result;
+}
 ?>

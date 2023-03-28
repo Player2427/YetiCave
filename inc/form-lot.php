@@ -22,7 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     else if (strlen($lot_name) < 4) $errors['lot-name'] = 'Минимум 4 символа';
     if ($category == 'Выберите категорию') $errors['category'] = 'Выберете категорию';
     if ($message == '') $errors['message'] = 'Добавьте описание';
-    else if (strlen($message) < 20) $errors['lot-name'] = 'Минимум 20 символов';
+    else if (strlen($message) < 20) $errors['message'] = 'Минимум 20 символов';
     if ($lot_rate == '') $errors['lot-rate'] = 'Введите начальную цену';
     else if (!is_numeric($lot_rate)) $errors['lot-rate'] = 'Недопустимый формат';
     else if ($lot_rate > 1000000) $errors['lot-rate'] = 'Максимальная цена 1 000 000';
