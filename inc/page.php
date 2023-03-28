@@ -41,7 +41,7 @@ switch ($_SESSION['page']) {
         $page = 'lot';
         // Тайтл и другие переменные для страницы лота следует брать из базы данных
         if (isset($_SESSION['key'])) {
-            $title = $lots[$_SESSION['key']]['name'];
+            $title = $lots[$_SESSION['key']]['lot-name'];
             $lot = $lots[$_SESSION['key']];
         } else {
             $title = $_SESSION['new-lot']['lot-name'];

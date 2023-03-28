@@ -14,20 +14,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $lot_step = hsc($_POST['lot-step']);
     $lot_date = hsc($_POST['lot-date']);
     
-    // Нужно будет переделать данные под эти ключи
     foreach ($keys as $key) {
         $_SESSION['new-lot'][$key] = hsc($_POST[$key]);
     }
-
-    // Пока используем эти
-    $_SESSION['new-lot']['name'] = hsc($_POST['lot-name']);
-    $_SESSION['new-lot']['category'] = hsc($_POST['category']);
-    $_SESSION['new-lot']['description'] = hsc($_POST['message']);
-    $_SESSION['new-lot']['price'] = hsc($_POST['lot-rate']);
-    $_SESSION['new-lot']['lot-step'] = hsc($_POST['lot-step']);
-    $_SESSION['new-lot']['date'] = hsc($_POST['lot-date']);
-    $_SESSION['new-lot']['bets'] = 0;
-
 
     if ($lot_name == '') $errors['lot-name'] = 'Введите наименование лота';
     else if (strlen($lot_name) < 4) $errors['lot-name'] = 'Минимум 4 символа';
