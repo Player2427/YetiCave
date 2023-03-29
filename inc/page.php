@@ -18,7 +18,8 @@ switch ($_SESSION['page']) {
         break;
 
     case 'add-lot':
-        $page = 'add-lot';
+        if (isset($_SESSION['username'])) $page = 'add-lot';
+        else $page = '403';
         $title = 'Добавление лота';
         break;
 

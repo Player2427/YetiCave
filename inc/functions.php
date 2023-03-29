@@ -21,10 +21,11 @@ function hsc($input) {
 }
 function searchUserByEmail($email, $users) {
     $result = null;
-    foreach ($users as $key => $user) {
-        if ($user['email'] === $email) 
-        $result = $user;
-        break;
+    foreach ($users as $user) {
+        if ($user['email'] == $email) {
+            $result = $user;
+            break;
+        }
     }
     return $result;
 }

@@ -11,12 +11,14 @@ $users = [
         'id' => '2',
         'username' => 'Константин',
         'email' => 'kitty_93@li.ru',
-        'password' => 'daecNazD',
+        // 'password' => 'daecNazD',
+        'password' => '$2y$10$6Uq/HOlhzhLzZjTgSOn17ukNWYnls.4pWyOrd550pfU6.cszwTzdi',
     ],
     [
         'id' => '2',
-        'username' => 'Данил',
+        'username' => 'Даниил',
         'email' => 'warrior07@mail.ru',
-        'password' => 'oixb3aL8',
+        // 'password' => 'oixb3aL8',
+        'password' => '$2y$10$jax.lrjrM1NOJHItWwaxVuPlJXvGUa/B7Z6sqqaVzqPAVgpGYIFjK',
     ],
 ];
