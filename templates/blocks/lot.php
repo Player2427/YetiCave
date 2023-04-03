@@ -12,7 +12,7 @@
                 </span>
               <span class="lot__cost"><?=format_price($lot['lot-rate']);?></span>
             </div>
-            <div class="lot__timer timer <?=($lot['timer--finishing'])?('timer--finishing'):('');?>">
+            <div class="lot__timer timer <?=(time_diff($lot['lot-date']) == '00:00:00')?('timer--finishing'):('');?>">
             <?=time_diff($lot['lot-date']);?>
             </div>
           </div>

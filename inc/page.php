@@ -53,6 +53,7 @@ switch ($_SESSION['page']) {
         if (isset($_SESSION['key'])) {
             $title = $lots[$_SESSION['key']]['lot-name'];
             $lot = $lots[$_SESSION['key']];
+            unset($_SESSION['key']);
         } else {
             $title = $_SESSION['new-lot']['lot-name'];
             $lot = $_SESSION['new-lot'];

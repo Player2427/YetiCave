@@ -25,9 +25,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     else if (strlen($message) < 20) $errors['message'] = 'Минимум 20 символов';
     if ($lot_rate == '') $errors['lot-rate'] = 'Введите начальную цену';
     else if (!is_numeric($lot_rate)) $errors['lot-rate'] = 'Недопустимый формат';
+    else if ($lot_rate < 1) $errors['lot-rate'] = 'Минимальное значение 1';
     else if ($lot_rate > 1000000) $errors['lot-rate'] = 'Максимальная цена 1 000 000';
     if ($lot_step == '') $errors['lot-step'] = 'Введите шаг ставки';
     else if (!is_numeric($lot_step)) $errors['lot-step'] = 'Недопустимый формат';
+    else if ($lot_step < 1) $errors['lot-step'] = 'Минимальное значение 1';
     else if ($lot_step > 100000) $errors['lot-step'] = 'Максимальный шаг 100 000';
     if ($lot_date == '') $errors['lot-date'] = 'Выберете дату';
 
@@ -36,7 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $uploadImageName = trim(strip_tags($uploadImage['name']));
         $uploadImageTmpName = trim(strip_tags($uploadImage['tmp_name']));
         $types = array('image/gif', 'image/png', 'image/jpeg', 'image/pjpeg');
-        if (!in_array($uploadImage['type'], $types)){
+        if (!in_array(mime_content_type($uploadImageTmpName), $types)){
             $errors['file'] = 'Недопустимый тип файла. Допустимо загружать только изображения.';
         }
         $extension = pathinfo($uploadImageName, PATHINFO_EXTENSION);
