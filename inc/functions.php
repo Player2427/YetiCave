@@ -20,7 +20,7 @@ function hsc($input) {
     return htmlspecialchars(trim($input));
 }
 function searchUserByEmail($email, $users) {
-    $result = null;
+    $result = false;
     foreach ($users as $user) {
         if ($user['email'] == $email) {
             $result = $user;
@@ -29,4 +29,5 @@ function searchUserByEmail($email, $users) {
     }
     return $result;
 }
+
 ?>
