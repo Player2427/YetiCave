@@ -1,9 +1,9 @@
 -- Получить все категории
 SELECT * FROM Category;
 -- Получить самые новые, открытые лоты
-SELECT Lot.LotID, LotName, LotPrice, LotPath, CategoryName, 
-IF (LotBet IS NULL , 0 , LotBet) AS LotBet,
-IF (BetPrice IS NULL , LotPrice , BetPrice) AS BetPrice
+SELECT Lot.LotID, LotName, LotPrice, LotPath, CategoryName,
+IFNULL(LotBet, 0) AS LotBet,
+IFNULL(BetPrice, LotPrice) AS BetPrice
 FROM (SELECT COUNT(BetID) AS LotBet, MAX(BetID) AS BetID, MAX(BetPrice) AS BetPrice, LotID FROM Bet GROUP by LotID) AS Lastbet
 right JOIN Lot ON Lot.LotID=Lastbet.LotID
 JOIN Category ON Lot.CategoryID=Category.CategoryID

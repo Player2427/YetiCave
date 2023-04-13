@@ -3,9 +3,9 @@
     <h2 class="promo__title">Нужен стафф для катки?</h2>
     <p class="promo__text">На нашем интернет-аукционе ты найдёшь самое эксклюзивное сноубордическое и горнолыжное снаряжение.</p>
     <ul class="promo__list">
-      <?php foreach ($category as $key => $value): ?>
-        <li class="promo__item promo__item--<?=$key?>">
-          <a class="promo__link" href="index.php?page=all-lots"><?=$value?></a>
+      <?php foreach ($category as $value): ?>
+        <li class="promo__item promo__item--<?=$value['style']?>">
+          <a class="promo__link" href="index.php?page=all-lots"><?=$value['name']?></a>
         </li>
       <?php endforeach; ?>
     </ul>
