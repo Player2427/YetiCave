@@ -16,7 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $_SESSION['reg']['name'] = $name;
     $_SESSION['reg']['message'] = $message;
 
-    require_once('../inc/mysql_connect.php');
+    $users = get_users($bd);
     $user = searchUserByEmail($email, $users);
 
     if ($email == '') $errors['email'] = 'Введите e-mail';

@@ -13,7 +13,7 @@
         <select id="category" name="category" >
           <option>Выберите категорию</option>
           <? foreach ($category as $value): ?>
-          <option <? echo $_SESSION['new-lot']['category'] == $value ? 'selected':'' ?>><?=$value?></option>
+          <option <? echo $_SESSION['new-lot']['category'] == $value['name'] ? 'selected':'' ?>><?=$value['name']?></option>
           <? endforeach; ?>
         </select>
         <span class="form__error"><?=$_SESSION['errors']['category']?></span>

@@ -1,7 +1,10 @@
 <?php
 session_start();
+require_once('../inc/mysql_connect.php');
 require_once('../inc/functions.php');
+require_once('../inc/helpers.php');
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    // переменные
     unset($_SESSION['errors']);
     unset($_SESSION['new-lot']);
     $keys = ['lot-name', 'category', 'message', 'lot-rate', 'lot-step', 'lot-date'];
@@ -17,10 +20,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     foreach ($keys as $key) {
         $_SESSION['new-lot'][$key] = hsc($_POST[$key]);
     }
-
+    $new_lot_id = get_last_lot_id($bd) + 1;
+    // Валидация
     if ($lot_name == '') $errors['lot-name'] = 'Введите наименование лота';
     else if (strlen($lot_name) < 4) $errors['lot-name'] = 'Минимум 4 символа';
-    if ($category == 'Выберите категорию') $errors['category'] = 'Выберете категорию';
+    if (!search_category($category, get_category($bd))) $errors['category'] = 'Выберете категорию';
     if ($message == '') $errors['message'] = 'Добавьте описание';
     else if (strlen($message) < 20) $errors['message'] = 'Минимум 20 символов';
     if ($lot_rate == '') $errors['lot-rate'] = 'Введите начальную цену';
@@ -42,29 +46,26 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $errors['file'] = 'Недопустимый тип файла. Допустимо загружать только изображения.';
         }
         $extension = pathinfo($uploadImageName, PATHINFO_EXTENSION);
-        $path = '../uploads/lot-' . 7 . '.' . $extension;
+        $path = '../uploads/lot-' . $new_lot_id . '.' . $extension;
         move_uploaded_file($uploadImageTmpName, $path);
         $_SESSION['new-lot']['path'] = $path;
     } else $errors['file'] = 'Загрузите изображение';
-
+    // Действия по результату валидации
     if (!empty($errors)) {
         $_SESSION['errors'] = $errors;
         header('Location: '.$_SERVER['HTTP_REFERER']);
         exit();
     } else {
+        $category_id = search_category($category, get_category($bd));
+        $category_id = $category_id['id'];
+        $user_id = $_SESSION['userid'];
+        $insert_user = "INSERT INTO lot (LotName, LotPath, LotPrice, LotStep, LotDate, LotMessage, CategoryID, UserID) 
+            VALUES ('$lot_name', '$path', '$lot_rate', '$lot_step', '$lot_date', '$message', '$category_id', '$user_id')";
+        $date = [$lot_name, $path, $lot_rate, $lot_step, $lot_date, $message, $category_id, $user_id];
+        $stmt = db_get_prepare_stmt($bd, $insert_user, $date);
+        mysqli_stmt_execute($stmt);
         header('Location: ../index.php?page=lot');
         exit();
     }
-
-    // echo 'lot-name - '.$lot_name.'<br>';
-    // echo 'category - '.$category.'<br>';
-    // echo 'message - '.$message.'<br>';
-    // echo 'lot-rate - '.$lot_rate.'<br>';
-    // echo 'lot-step - '.$lot_step.'<br>';
-    // echo 'lot-date - '.$lot_date.'<br>';
-    // echo '<pre>';
-    // print_r($_FILES);
-    // echo '</pre>';
-
 
 }

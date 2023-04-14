@@ -1,6 +1,6 @@
 <?php
 session_start();
-
+require_once('../inc/mysql_connect.php');
 require_once('../inc/functions.php');
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     unset($_SESSION['errors']);
@@ -10,7 +10,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $password = hsc($_POST['password']);
     $_SESSION['new-auch']['email'] = $email;
     $_SESSION['new-auch']['password'] = $password;
-    require_once('../inc/mysql_connect.php');
+    $users = get_users($bd);
     $user = searchUserByEmail($email, $users);
 
     if ($email == '') $errors['email'] = 'Введите e-mail';
@@ -26,6 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         exit();
     } else {
         $_SESSION['username'] = $user['name'];
+        $_SESSION['userid'] = $user['id'];
         unset($_SESSION['new-auch']);
         header('Location: ../index.php?page=index');
         exit();

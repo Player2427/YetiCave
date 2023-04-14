@@ -53,7 +53,8 @@ switch ($_SESSION['page']) {
         if (isset($_SESSION['key'])) {
             $title = $lots[$_SESSION['key']]['lot-name'];
             $lot = $lots[$_SESSION['key']];
-            unset($_SESSION['key']);
+            $_SESSION['lot-id']=$lot['id'];
+            $bets = get_bets($bd, $_SESSION['lot-id']);
         } else {
             $title = $_SESSION['new-lot']['lot-name'];
             $lot = $_SESSION['new-lot'];
@@ -85,5 +86,6 @@ $content = include_template("$page.php", [
     'category' => $category,
     'lots' => $lots,
     'lot' => $lot,
+    'bets' => $bets,
 ]);
 // unset($_SESSION['page']);

@@ -1,6 +1,6 @@
   <main>
     <?=$nav?>
-    <form class="form container" action="inc/form-auth.php" method="post"> <!-- form--invalid -->
+    <form class="form container <?php if (!empty($_SESSION['errors'])) echo "form--invalid";?>" action="inc/form-auth.php" method="post"> <!-- form--invalid -->
       <h2>Вход</h2>
       <div class="form__item <?php if (isset($_SESSION['errors']['email'])) echo 'form__item--invalid'?>"> <!-- form__item--invalid -->
         <label for="email">E-mail <sup>*</sup></label>
