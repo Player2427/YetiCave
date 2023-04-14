@@ -10,11 +10,12 @@ function format_price($price, $currency = '₽') {
 function time_diff($two) {
     $tomorrow = strtotime($two);
     $diff = $tomorrow - time();
-    if ($diff <= 0) return "00:00:00";
     $h = sprintf("%02d", floor($diff / 3600));
     $min = sprintf("%02d", floor(($diff % 3600) / 60));
     $s = sprintf("%02d", $diff % 60);
-    return "$h:$min:$s";
+    if ($diff <= 0) $res = "00:00:00";
+    else $res = "$h:$min:$s";
+    return $res;
 }
 
 function hsc($input) {
@@ -34,6 +35,14 @@ function format_datetime($date) {
         if ($hours == 1) $res = 'Час назад';
         else $res = $hours . " " . get_noun_plural_form($hours, 'час', 'часа', 'часов') . " назад";}
     else $res = date('d.m.y в H:i', $origin);
+    return $res;
+}
+// 
+function timer_finishing($date, $diff_user = 3600) {
+    $date = strtotime($date);
+    $diff = $date - time();
+    if ($diff < $diff_user) $res = true;
+    else $res = false;
     return $res;
 }
 // функции поиска в масиве
@@ -84,4 +93,23 @@ function get_bets($bd, $lotid) {
     ORDER BY price DESC";
     return my_query($bd, $select);
 } 
+function get_bets_user($bd, $user_id) {
+    $select = "SELECT BetID, BetPrice, BetTime, LotName, LotDate, LotPath, CategoryName, user_first.UserMessage, lot.LotID FROM bet
+    JOIN user ON bet.UserID=user.UserID
+    JOIN lot ON bet.LotID=lot.LotID
+    JOIN user AS user_first ON lot.UserID=user_first.UserID
+    JOIN category ON lot.CategoryID=category.CategoryID
+    WHERE bet.UserID='$user_id'
+    ORDER BY BetTime DESC";
+    return my_query($bd, $select);
+}
+function last_bet($id) {
+    global $bd;
+    $select = "SELECT bet.BetID FROM bet, (SELECT MAX(BetPrice) AS BetPrice, LotID FROM bet WHERE LotID=(SELECT lotID FROM bet WHERE BetID=$id) GROUP BY LotID) AS max
+    WHERE bet.LotID=MAX.LotID AND bet.BetPrice=MAX.BetPrice;";
+    $win_bet = my_query($bd, $select);
+    if ($id == $win_bet[0]['BetID']) $res = true;
+    else $res = false;
+    return $res;
+}
 ?>

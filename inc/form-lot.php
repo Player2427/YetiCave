@@ -36,6 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     else if ($lot_step < 1) $errors['lot-step'] = 'Минимальное значение 1';
     else if ($lot_step > 100000) $errors['lot-step'] = 'Максимальный шаг 100 000';
     if ($lot_date == '') $errors['lot-date'] = 'Выберете дату';
+    else if(time_diff($lot_date) == "00:00:00") $errors['lot-date'] = 'Выберете более позднюю дату';
 
     if (!empty($_FILES['lot_img']['tmp_name'])) {
         $uploadImage = $_FILES['lot_img'];           

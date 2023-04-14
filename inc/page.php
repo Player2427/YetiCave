@@ -71,6 +71,7 @@ switch ($_SESSION['page']) {
     case 'my-bets':
         $page = 'my-bets';
         // Тайтл и другие переменные для страницы лота следует брать из базы данных
+        $bets = get_bets_user($bd, $_SESSION['userid']);
         $title = 'Мои ставки';
         break;
         
