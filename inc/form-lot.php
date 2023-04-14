@@ -17,9 +17,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $lot_step = hsc($_POST['lot-step']);
     $lot_date = hsc($_POST['lot-date']);
     
-    foreach ($keys as $key) {
-        $_SESSION['new-lot'][$key] = hsc($_POST[$key]);
-    }
     $new_lot_id = get_last_lot_id($bd) + 1;
     // Валидация
     if ($lot_name == '') $errors['lot-name'] = 'Введите наименование лота';
@@ -65,6 +62,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $date = [$lot_name, $path, $lot_rate, $lot_step, $lot_date, $message, $category_id, $user_id];
         $stmt = db_get_prepare_stmt($bd, $insert_user, $date);
         mysqli_stmt_execute($stmt);
+        $_SESSION['lotid'] = get_last_lot_id($bd);
         header('Location: ../index.php?page=lot');
         exit();
     }

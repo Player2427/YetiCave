@@ -14,7 +14,7 @@
               <img src="<?=$bet['LotPath']?>" width="54" height="40" alt="">
             </div>
             <div>
-              <h3 class="rates__title"><a href="#"><?=$bet['LotName']?></a></h3>
+              <h3 class="rates__title"><a href="index.php?page=lot&lotid=<?=$bet['LotID'];?>"><?=$bet['LotName']?></a></h3>
               <?php if ($win) echo "<p>{$bet['UserMessage']}</p>"; ?>
             </div>
           </td>

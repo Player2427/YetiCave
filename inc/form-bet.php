@@ -18,7 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         header('Location: '.$_SERVER['HTTP_REFERER']);
         exit();
     } else {
-        $lot_id = $_SESSION['lot-id'];
+        $lot_id = $_SESSION['lotid'];
         $user_id = $_SESSION['userid'];
         $insert_user = "INSERT INTO bet (BetPrice, UserID, LotID) 
             VALUES ('$cost', '$user_id', '$lot_id')";

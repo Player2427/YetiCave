@@ -1,9 +1,9 @@
 <?php
 if (!empty($_GET)) {
     if (isset($_GET['page'])) $_SESSION['page'] = $_GET['page'];
-    if (isset($_GET['lot'])) {
-        $_SESSION['key'] = $_GET['lot'];
-        if (!isset($lots[$_SESSION['key']])) $_SESSION['page'] = '404';;
+    if (isset($_GET['lotid'])) {
+        if (check_lot($_SESSION['lotid'])) $_SESSION['lotid'] = $_GET['lotid'];
+        else $_SESSION['page'] = '404';
     };
     header('Location: index.php');
     exit();
@@ -50,16 +50,9 @@ switch ($_SESSION['page']) {
     case 'lot':
         $page = 'lot';
         // Тайтл и другие переменные для страницы лота следует брать из базы данных
-        if (isset($_SESSION['key'])) {
-            $title = $lots[$_SESSION['key']]['lot-name'];
-            $lot = $lots[$_SESSION['key']];
-            $_SESSION['lot-id']=$lot['id'];
-            $bets = get_bets($bd, $_SESSION['lot-id']);
-        } else {
-            $title = $_SESSION['new-lot']['lot-name'];
-            $lot = $_SESSION['new-lot'];
-            unset($_SESSION['new-lot']);
-        }
+        $lot = get_lot($_SESSION['lotid']);
+        $title = $lot['lot-name'];
+        $bets = get_bets($bd, $_SESSION['lotid']);
         break;
         
     case 'search':
