@@ -2,7 +2,11 @@
 if (!empty($_GET)) {
     if (isset($_GET['page'])) $_SESSION['page'] = $_GET['page'];
     if (isset($_GET['lotid'])) {
-        if (check_lot($_SESSION['lotid'])) $_SESSION['lotid'] = $_GET['lotid'];
+        if (check_lot($_GET['lotid'])) $_SESSION['lotid'] = $_GET['lotid'];
+        else $_SESSION['page'] = '404';
+    };
+    if (isset($_GET['catid'])) {
+        if (check_cat($_GET['catid'])) $_SESSION['catid'] = $_GET['catid'];
         else $_SESSION['page'] = '404';
     };
     header('Location: index.php');
@@ -14,6 +18,7 @@ if (!empty($_GET)) {
 switch ($_SESSION['page']) {
     case 'index':
         $page = 'index';
+        $lots = get_open_lots();
         $title = 'Главная';
         break;
 
@@ -38,6 +43,7 @@ switch ($_SESSION['page']) {
         break;
 
     case 'all-lots':
+        $lots = get_open_lots($_SESSION['catid']);
         $page = 'all-lots';
         $title = 'Все лоты';
         break;

@@ -140,4 +140,32 @@ function check_lot($id) {
     else $res = true;
     return $res;
 }
+function check_cat($id) {
+    global $bd;
+    $select = "SELECT CategoryID FROM Category WHERE CategoryID=$id";
+    if (empty(my_query($bd, $select))) $res = false;
+    else $res = true;
+    return $res;
+}
+function get_open_lots($category = '') {
+    global $bd;
+    if ($category) $category = " and Lot.CategoryID='$category'";
+    $select = "SELECT
+    Lot.LotId as id,
+    LotName as 'lot-name',
+    LotPath as path,
+    Lot.LotStep as 'lot-step',
+    Lot.LotDate as 'lot-date',
+    Lot.LotTime as time,
+    Lot.LotMessage as message,
+    CategoryName as category,
+    IFNULL(LotBet, 0) AS bets,
+    IFNULL(BetPrice, LotPrice) AS 'lot-rate'
+    FROM (SELECT COUNT(BetID) AS LotBet, MAX(BetID) AS BetID, MAX(BetPrice) AS BetPrice, LotID FROM Bet GROUP by LotID) AS Lastbet
+    right JOIN Lot ON Lot.LotID=Lastbet.LotID
+    JOIN Category ON Lot.CategoryID=Category.CategoryID
+    WHERE Lot.LotOpen=1$category
+    ORDER BY Lot.LotTime DESC";
+    return my_query($bd, $select);
+}
 ?>
