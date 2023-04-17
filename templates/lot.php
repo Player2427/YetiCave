@@ -11,7 +11,7 @@
           <p class="lot-item__description"><?=$lot['message']?></p>
         </div>
         <div class="lot-item__right">
-          <?php if (isset($_SESSION['username'])): ?>
+          <?php if (show_add_bet_bloc()): ?>
           <div class="lot-item__state">
             <div class="lot-item__timer timer">
               <?=time_diff($lot['lot-date']);?>

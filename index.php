@@ -6,7 +6,6 @@ require_once('inc/data.php');
 require_once('inc/page.php');
 require_once('inc/history.php');
 require_once('inc/auth.php');
-
 date_default_timezone_set("Europe/Moscow");
 
 $html = include_template('layout.php', [

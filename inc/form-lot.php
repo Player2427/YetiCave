@@ -8,6 +8,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     unset($_SESSION['errors']);
     unset($_SESSION['new-lot']);
     $keys = ['lot-name', 'category', 'message', 'lot-rate', 'lot-step', 'lot-date'];
+    foreach ($keys as $key) {
+        $_SESSION['new-lot'][$key] = hsc($_POST[$key]);
+    }
     $errors = [];
 
     $lot_name = hsc($_POST['lot-name']);
@@ -17,11 +20,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $lot_step = hsc($_POST['lot-step']);
     $lot_date = hsc($_POST['lot-date']);
     
-    $new_lot_id = get_last_lot_id($bd) + 1;
+    $new_lot_id = get_last_lot_id() + 1;
     // Валидация
     if ($lot_name == '') $errors['lot-name'] = 'Введите наименование лота';
     else if (strlen($lot_name) < 4) $errors['lot-name'] = 'Минимум 4 символа';
-    if (!search_category($category, get_category($bd))) $errors['category'] = 'Выберете категорию';
+    if (!search_category($category, get_category())) $errors['category'] = 'Выберете категорию';
     if ($message == '') $errors['message'] = 'Добавьте описание';
     else if (strlen($message) < 20) $errors['message'] = 'Минимум 20 символов';
     if ($lot_rate == '') $errors['lot-rate'] = 'Введите начальную цену';
@@ -54,7 +57,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         header('Location: '.$_SERVER['HTTP_REFERER']);
         exit();
     } else {
-        $category_id = search_category($category, get_category($bd));
+        $category_id = search_category($category, get_category());
         $category_id = $category_id['id'];
         $user_id = $_SESSION['userid'];
         $insert_user = "INSERT INTO lot (LotName, LotPath, LotPrice, LotStep, LotDate, LotMessage, CategoryID, UserID) 
@@ -62,7 +65,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $date = [$lot_name, $path, $lot_rate, $lot_step, $lot_date, $message, $category_id, $user_id];
         $stmt = db_get_prepare_stmt($bd, $insert_user, $date);
         mysqli_stmt_execute($stmt);
-        $_SESSION['lotid'] = get_last_lot_id($bd);
+        $_SESSION['lotid'] = get_last_lot_id();
         header('Location: ../index.php?page=lot');
         exit();
     }

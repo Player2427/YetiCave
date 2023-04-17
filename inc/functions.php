@@ -67,33 +67,34 @@ function search_category($name, $category) {
     return $result;
 }
 // функции запроса в бд
-function my_query($bd, $query) {
+function my_query($query) {
+    global $bd;
     $res_query = mysqli_query($bd, $query);
     $arr = mysqli_fetch_all($res_query, MYSQLI_ASSOC);
     return $arr;
 }
-function get_category($bd) {
+function get_category() {
     $query = "SELECT CategoryName as name, CategoryClass as style, CategoryID as id FROM category";
-    return my_query($bd, $query);
+    return my_query($query);
 }
-function get_users($bd) {
+function get_users() {
     $select = "SELECT UserID as id, UserEmail as email, UserName as name, UserPassword as password FROM user";
-    return my_query($bd, $select);
+    return my_query($select);
 }
-function get_last_lot_id($bd) {
+function get_last_lot_id() {
     $select = "SELECT LotID as id FROM lot ORDER BY LotID DESC LIMIT 1";
-    $lots = my_query($bd, $select);
+    $lots = my_query($select);
     return $lots[0]['id'];
 }
-function get_bets($bd, $lotid) {
+function get_bets($lotid) {
     $select = "SELECT BetTime AS time, BetPrice AS price, user.UserName AS name FROM bet
     JOIN user ON bet.UserID=user.UserID
     JOIN lot ON bet.LotID=lot.LotID
     WHERE lot.LotID = '$lotid'
     ORDER BY price DESC";
-    return my_query($bd, $select);
+    return my_query($select);
 } 
-function get_bets_user($bd, $user_id) {
+function get_bets_user($user_id) {
     $select = "SELECT BetID, BetPrice, BetTime, LotName, LotDate, LotPath, CategoryName, user_first.UserMessage, lot.LotID FROM bet
     JOIN user ON bet.UserID=user.UserID
     JOIN lot ON bet.LotID=lot.LotID
@@ -101,19 +102,17 @@ function get_bets_user($bd, $user_id) {
     JOIN category ON lot.CategoryID=category.CategoryID
     WHERE bet.UserID='$user_id'
     ORDER BY BetTime DESC";
-    return my_query($bd, $select);
+    return my_query($select);
 }
 function last_bet($id) {
-    global $bd;
     $select = "SELECT bet.BetID FROM bet, (SELECT MAX(BetPrice) AS BetPrice, LotID FROM bet WHERE LotID=(SELECT lotID FROM bet WHERE BetID=$id) GROUP BY LotID) AS max
     WHERE bet.LotID=MAX.LotID AND bet.BetPrice=MAX.BetPrice;";
-    $win_bet = my_query($bd, $select);
+    $win_bet = my_query($select);
     if ($id == $win_bet[0]['BetID']) $res = true;
     else $res = false;
     return $res;
 }
 function get_lot($lotid) {
-    global $bd;
     $select = "SELECT
     Lot.LotId as id,
     LotName as 'lot-name',
@@ -130,26 +129,22 @@ function get_lot($lotid) {
     JOIN Category ON Lot.CategoryID=Category.CategoryID
     WHERE Lot.LotID=$lotid
     ORDER BY Lot.LotTime DESC";
-    $lots = my_query($bd, $select);
+    $lots = my_query($select);
     return $lots[0];
 }
 function check_lot($id) {
-    global $bd;
     $select = "SELECT LotID FROM lot WHERE LotID=$id";
-    if (empty(my_query($bd, $select))) $res = false;
+    if (empty(my_query($select))) $res = false;
     else $res = true;
     return $res;
 }
 function check_cat($id) {
-    global $bd;
     $select = "SELECT CategoryID FROM Category WHERE CategoryID=$id";
-    if (empty(my_query($bd, $select))) $res = false;
+    if (empty(my_query($select))) $res = false;
     else $res = true;
     return $res;
 }
-function get_open_lots($category = '') {
-    global $bd;
-    if ($category) $category = " and Lot.CategoryID='$category'";
+function get_open_lots($search = '') {
     $select = "SELECT
     Lot.LotId as id,
     LotName as 'lot-name',
@@ -164,8 +159,34 @@ function get_open_lots($category = '') {
     FROM (SELECT COUNT(BetID) AS LotBet, MAX(BetID) AS BetID, MAX(BetPrice) AS BetPrice, LotID FROM Bet GROUP by LotID) AS Lastbet
     right JOIN Lot ON Lot.LotID=Lastbet.LotID
     JOIN Category ON Lot.CategoryID=Category.CategoryID
-    WHERE Lot.LotOpen=1$category
+    WHERE Lot.LotOpen=1$search
     ORDER BY Lot.LotTime DESC";
-    return my_query($bd, $select);
+    return my_query($select);
+}
+// Определение победителя
+function winner_determination() {
+    global $bd;
+    $lots = my_query("SELECT LotID, LotDate FROM lot WHERE LotOpen='1'");
+    foreach ($lots as $lot) {
+        if (timer_finishing($lot['LotDate'], 0)) {
+            $users = my_query("SELECT UserID FROM Bet WHERE LotID='{$lot['LotID']}' ORDER BY BetPrice DESC LIMIT 1");
+            if (!empty($users[0]['UserID'])) {
+                $update = "UPDATE lot SET WinUserID='{$users[0]['UserID']}', LotOpen='0' WHERE LotID='{$lot['LotID']}'";
+                // Здесь должен быть код для отправки письма о победе пользователю
+            }
+            else $update = "UPDATE lot SET LotOpen='0' WHERE LotID='{$lot['LotID']}'";
+            $res_query = mysqli_query($bd, $update);
+        }
+    }
+}
+// функция выводит False если:
+// пользователь не авторизован
+// лот создан текущим пользователем
+// лот закрыт
+function show_add_bet_bloc() {
+    $lot = my_query("SELECT UserID, LotOpen FROM lot WHERE LotID='{$_SESSION['lotid']}'");
+    $res = False;
+    if (isset($_SESSION['username']) and $_SESSION['userid'] != $lot[0]['UserID'] and $lot[0]['LotOpen'] == 1) $res = True;
+    return $res;
 }
 ?>

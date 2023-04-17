@@ -43,7 +43,9 @@ switch ($_SESSION['page']) {
         break;
 
     case 'all-lots':
-        $lots = get_open_lots($_SESSION['catid']);
+        $catsort = $_SESSION['catid'];
+        if ($catsort) $catsort = " and Lot.CategoryID='$catsort'";
+        $lots = get_open_lots($catsort);
         $page = 'all-lots';
         $title = 'Все лоты';
         break;
@@ -58,10 +60,16 @@ switch ($_SESSION['page']) {
         // Тайтл и другие переменные для страницы лота следует брать из базы данных
         $lot = get_lot($_SESSION['lotid']);
         $title = $lot['lot-name'];
-        $bets = get_bets($bd, $_SESSION['lotid']);
+        $bets = get_bets($_SESSION['lotid']);
         break;
         
     case 'search':
+        $search = $_SESSION['search'];
+        if ($search) {
+            $search = " and (lot.LotName LIKE '%$search%' OR lot.LotMessage LIKE '%$search%')";
+            $lots = get_open_lots($search);
+        } else $lots = [];
+        // $lots = get_search_lots($_SESSION['search']);
         $page = 'search';
         // Тайтл и другие переменные для страницы лота следует брать из базы данных
         $title = 'Результаты поиска';
@@ -70,7 +78,7 @@ switch ($_SESSION['page']) {
     case 'my-bets':
         $page = 'my-bets';
         // Тайтл и другие переменные для страницы лота следует брать из базы данных
-        $bets = get_bets_user($bd, $_SESSION['userid']);
+        $bets = get_bets_user($_SESSION['userid']);
         $title = 'Мои ставки';
         break;
         

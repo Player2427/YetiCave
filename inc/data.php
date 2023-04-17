@@ -1,7 +1,9 @@
 <?php
 $bd = mysqli_connect('127.0.0.1', 'yeticave', 'timitimi', 'yeticave');
-mysqli_set_charset($bd, "utf8");
+// $bd = mysqli_connect('127.0.0.1', 'root', 'root', 'yeticave');
+// mysqli_set_charset($bd, "utf8");
 
+winner_determination();
 $select = "SELECT CategoryID as id, CategoryName as name, CategoryClass as style FROM category";
 $res_select = mysqli_query($bd, $select);
 $category = mysqli_fetch_all($res_select, MYSQLI_ASSOC);

@@ -10,7 +10,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $password = hsc($_POST['password']);
     $_SESSION['new-auch']['email'] = $email;
     $_SESSION['new-auch']['password'] = $password;
-    $users = get_users($bd);
+    $users = get_users();
     $user = searchUserByEmail($email, $users);
 
     if ($email == '') $errors['email'] = 'Введите e-mail';

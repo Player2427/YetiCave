@@ -17,7 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $_SESSION['reg']['name'] = $name;
     $_SESSION['reg']['message'] = $message;
 
-    $users = get_users($bd);
+    $users = get_users();
     $user = searchUserByEmail($email, $users);
     // Валидация
     if ($email == '') $errors['email'] = 'Введите e-mail';
