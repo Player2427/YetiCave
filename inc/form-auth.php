@@ -28,7 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $_SESSION['username'] = $user['name'];
         $_SESSION['userid'] = $user['id'];
         unset($_SESSION['new-auch']);
-        header('Location: ../index.php?page=index');
+        header('Location: ../index');
         exit();
     }
     

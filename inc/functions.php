@@ -38,8 +38,8 @@ function format_datetime($date) {
     return $res;
 }
 function pagination_url($i) {
-    $request_url = explode("&", $_SERVER['REQUEST_URI']);
-    return $request_url[0].'&pagination='.$i;
+    $request_url = explode("?", $_SERVER['REQUEST_URI']);
+    return $request_url[0].'?pagination='.$i;
 }
 function pagination_lots($lots) {
     $count = count($lots);

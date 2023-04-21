@@ -66,7 +66,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $stmt = db_get_prepare_stmt($bd, $insert_user, $date);
         mysqli_stmt_execute($stmt);
         $_SESSION['lotid'] = get_last_lot_id();
-        header('Location: ../index.php?page=lot');
+        header('Location: ../lot');
         exit();
     }
 

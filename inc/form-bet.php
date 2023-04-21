@@ -25,7 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $date = [$cost, $user_id, $lot_id];
         $stmt = db_get_prepare_stmt($bd, $insert_user, $date);
         mysqli_stmt_execute($stmt);
-        header('Location: ../index.php?page=lot');
+        header('Location: ../lot');
         exit();
     }
 

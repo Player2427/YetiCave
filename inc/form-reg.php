@@ -45,7 +45,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         // $res_insert = mysqli_query($bd, $insert_user);
         mysqli_stmt_execute($stmt);
         unset($_SESSION['reg']);
-        header('Location: ../index.php?page=login');
+        header('Location: ../login');
         exit();
     }
     
