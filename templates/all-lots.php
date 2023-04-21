@@ -2,7 +2,7 @@
     <?=$nav?>
     <div class="container">
       <section class="lots">
-        <h2>Все лоты в категории <span>«Доски и лыжи»</span></h2>
+        <h2>Все лоты в категории <span>«<?=$category[$_SESSION['catid']-1]['name'];?>»</span></h2>
         <ul class="lots__list">
         <?php foreach (pagination_lots($lots) as $key => $lot): ?>
           <?=include_template('blocks/lot.php', ['lot' => $lot, 'key' => $key])?>
