@@ -41,11 +41,11 @@ function pagination_url($i) {
     $request_url = explode("?", $_SERVER['REQUEST_URI']);
     return $request_url[0].'?pagination='.$i;
 }
-function pagination_lots($lots) {
+function pagination_lots($lots, $num = '9') {
     $count = count($lots);
-    if (isset($_GET['pagination']) and $_GET['pagination'] <= count_pages($lots, 9)) $page = $_GET['pagination'];
+    if (isset($_GET['pagination']) and $_GET['pagination'] <= count_pages($lots, $num)) $page = $_GET['pagination'];
     else $page = 1;
-    $lots = array_slice($lots, ($page-1)*9, $page*9);
+    $lots = array_slice($lots, ($page-1)*$num, $page*$num);
     return $lots;
 }
 function count_pages($lots, $num = '9') {

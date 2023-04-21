@@ -1,4 +1,7 @@
 CREATE DATABASE yeticave;
+CREATE USER 'yeticave'@'localhost' IDENTIFIED BY 'timitimi';
+GRANT ALL PRIVILEGES ON yeticave.* TO 'yeticave'@'localhost';
+FLUSH PRIVILEGES;
 USE yeticave;
 CREATE TABLE Category (
     CategoryID INT AUTO_INCREMENT PRIMARY KEY, 
@@ -40,3 +43,11 @@ CREATE TABLE Bet (
     LotID INT NOT NULL,
     FOREIGN KEY (LotID) REFERENCES Lot(LotID)
 );
+INSERT INTO Category (CategoryName, CategoryClass)
+VALUES 
+    ('Доски и лыжи', 'boards'),
+    ('Крепления', 'attachment'),
+    ('Ботинки', 'boots'),
+    ('Одежда', 'clothing'),
+    ('Инструменты', 'tools'),
+    ('Разное', 'other');
