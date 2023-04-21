@@ -1,0 +1,15 @@
+RewriteEngine On
+
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_URI} !^\/css/(.*).css
+RewriteCond %{REQUEST_URI} !^\/fonts/(.*).woff
+RewriteCond %{REQUEST_URI} !^\/fonts/(.*).woff2
+RewriteCond %{REQUEST_URI} !^\/img/(.*).png
+RewriteCond %{REQUEST_URI} !^\/img/(.*).jpg
+RewriteCond %{REQUEST_URI} !^\/img/(.*).svg
+RewriteCond %{REQUEST_URI} !^\/uploads/(.*).png
+RewriteCond %{REQUEST_URI} !^\/uploads/(.*).jpg
+RewriteCond %{REQUEST_URI} !^\/uploads/(.*).svg
+RewriteCond %{REQUEST_URI} !^\/js/(.*).js
+RewriteCond %{REQUEST_URI} !^\/(.*).js
+RewriteRule ^(.*)$ index.php?%{REQUEST_URI} [QSA,L]

@@ -37,6 +37,23 @@ function format_datetime($date) {
     else $res = date('d.m.y в H:i', $origin);
     return $res;
 }
+function pagination_url($i) {
+    $request_url = explode("&", $_SERVER['REQUEST_URI']);
+    return $request_url[0].'&pagination='.$i;
+}
+function pagination_lots($lots) {
+    $count = count($lots);
+    if (isset($_GET['pagination']) and $_GET['pagination'] <= count_pages($lots, 9)) $page = $_GET['pagination'];
+    else $page = 1;
+    $lots = array_slice($lots, ($page-1)*9, $page*9);
+    return $lots;
+}
+function count_pages($lots, $num = '9') {
+    $count_lots = count($lots);
+    if ($count_lots % $num == 0) $count_pages = $count_lots / $num;
+    else $count_pages = (intdiv($count_lots, $num) + 1);
+    return $count_pages;
+}
 // 
 function timer_finishing($date, $diff_user = 3600) {
     $date = strtotime($date);
