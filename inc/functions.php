@@ -41,11 +41,11 @@ function pagination_url($i) {
     $request_url = explode("?", $_SERVER['REQUEST_URI']);
     return $request_url[0].'?pagination='.$i;
 }
-function pagination_lots($lots, $num = '9') {
+function pagination_lots($lots) {
     $count = count($lots);
-    if (isset($_GET['pagination']) and $_GET['pagination'] <= count_pages($lots, $num)) $page = $_GET['pagination'];
+    if (isset($_GET['pagination']) and $_GET['pagination'] <= count_pages($lots, 9)) $page = $_GET['pagination'];
     else $page = 1;
-    $lots = array_slice($lots, ($page-1)*$num, $page*$num);
+    $lots = array_slice($lots, ($page-1)*9, $page*9);
     return $lots;
 }
 function count_pages($lots, $num = '9') {
@@ -131,21 +131,21 @@ function last_bet($id) {
 }
 function get_lot($lotid) {
     $select = "SELECT
-    Lot.LotId as id,
+    lot.LotId as id,
     LotName as 'lot-name',
     LotPath as path,
-    Lot.LotStep as 'lot-step',
-    Lot.LotDate as 'lot-date',
-    Lot.LotTime as time,
-    Lot.LotMessage as message,
+    lot.LotStep as 'lot-step',
+    lot.LotDate as 'lot-date',
+    lot.LotTime as time,
+    lot.LotMessage as message,
     CategoryName as category,
     IFNULL(LotBet, 0) AS bets,
     IFNULL(BetPrice, LotPrice) AS 'lot-rate'
-    FROM (SELECT COUNT(BetID) AS LotBet, MAX(BetID) AS BetID, MAX(BetPrice) AS BetPrice, LotID FROM Bet GROUP by LotID) AS Lastbet
-    right JOIN Lot ON Lot.LotID=Lastbet.LotID
-    JOIN Category ON Lot.CategoryID=Category.CategoryID
-    WHERE Lot.LotID=$lotid
-    ORDER BY Lot.LotTime DESC";
+    FROM (SELECT COUNT(BetID) AS LotBet, MAX(BetID) AS BetID, MAX(BetPrice) AS BetPrice, LotID FROM bet GROUP by LotID) AS Lastbet
+    right JOIN lot ON lot.LotID=Lastbet.LotID
+    JOIN category ON lot.CategoryID=category.CategoryID
+    WHERE lot.LotID=$lotid
+    ORDER BY lot.LotTime DESC";
     $lots = my_query($select);
     return $lots[0];
 }
@@ -156,28 +156,28 @@ function check_lot($id) {
     return $res;
 }
 function check_cat($id) {
-    $select = "SELECT CategoryID FROM Category WHERE CategoryID=$id";
+    $select = "SELECT CategoryID FROM category WHERE CategoryID=$id";
     if (empty(my_query($select))) $res = false;
     else $res = true;
     return $res;
 }
 function get_open_lots($search = '') {
     $select = "SELECT
-    Lot.LotId as id,
+    lot.LotId as id,
     LotName as 'lot-name',
     LotPath as path,
-    Lot.LotStep as 'lot-step',
-    Lot.LotDate as 'lot-date',
-    Lot.LotTime as time,
-    Lot.LotMessage as message,
+    lot.LotStep as 'lot-step',
+    lot.LotDate as 'lot-date',
+    lot.LotTime as time,
+    lot.LotMessage as message,
     CategoryName as category,
     IFNULL(LotBet, 0) AS bets,
     IFNULL(BetPrice, LotPrice) AS 'lot-rate'
-    FROM (SELECT COUNT(BetID) AS LotBet, MAX(BetID) AS BetID, MAX(BetPrice) AS BetPrice, LotID FROM Bet GROUP by LotID) AS Lastbet
-    right JOIN Lot ON Lot.LotID=Lastbet.LotID
-    JOIN Category ON Lot.CategoryID=Category.CategoryID
-    WHERE Lot.LotOpen=1$search
-    ORDER BY Lot.LotTime DESC";
+    FROM (SELECT COUNT(BetID) AS LotBet, MAX(BetID) AS BetID, MAX(BetPrice) AS BetPrice, LotID FROM bet GROUP by LotID) AS Lastbet
+    right JOIN lot ON lot.LotID=Lastbet.LotID
+    JOIN category ON lot.CategoryID=category.CategoryID
+    WHERE lot.LotOpen=1$search
+    ORDER BY lot.LotTime DESC";
     return my_query($select);
 }
 // Определение победителя
@@ -186,7 +186,7 @@ function winner_determination() {
     $lots = my_query("SELECT LotID, LotDate FROM lot WHERE LotOpen='1'");
     foreach ($lots as $lot) {
         if (timer_finishing($lot['LotDate'], 0)) {
-            $users = my_query("SELECT UserID FROM Bet WHERE LotID='{$lot['LotID']}' ORDER BY BetPrice DESC LIMIT 1");
+            $users = my_query("SELECT UserID FROM bet WHERE LotID='{$lot['LotID']}' ORDER BY BetPrice DESC LIMIT 1");
             if (!empty($users[0]['UserID'])) {
                 $update = "UPDATE lot SET WinUserID='{$users[0]['UserID']}', LotOpen='0' WHERE LotID='{$lot['LotID']}'";
                 // Здесь должен быть код для отправки письма о победе пользователю

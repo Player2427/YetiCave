@@ -53,7 +53,7 @@ switch ($_SERVER['REDIRECT_URL']) {
     case '/all-lots/':
     case '/all-lots':
         $catsort = $_SESSION['catid'];
-        if ($catsort) $catsort = " and Lot.CategoryID='$catsort'";
+        if ($catsort) $catsort = " and lot.CategoryID='$catsort'";
         $lots = get_open_lots($catsort);
         $page = 'all-lots';
         $title = 'Все лоты';
