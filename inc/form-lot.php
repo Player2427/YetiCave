@@ -43,13 +43,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $uploadImageName = trim(strip_tags($uploadImage['name']));
         $uploadImageTmpName = trim(strip_tags($uploadImage['tmp_name']));
         $types = array('image/gif', 'image/png', 'image/jpeg', 'image/pjpeg');
-        if (!in_array(mime_content_type($uploadImageTmpName), $types)){
+        $extensions = array('png', 'jpeg', 'jpg', 'gif', 'svg');
+        $file_extension = array_pop(explode('.', $uploadImageName));
+        if (!in_array(mime_content_type($uploadImageTmpName), $types) || (!in_array($file_extension, $extensions))){
             $errors['file'] = 'Недопустимый тип файла. Допустимо загружать только изображения.';
-        }
+        } else {
         $extension = pathinfo($uploadImageName, PATHINFO_EXTENSION);
         $path = '../uploads/lot-' . $new_lot_id . '.' . $extension;
         move_uploaded_file($uploadImageTmpName, $path);
         $_SESSION['new-lot']['path'] = $path;
+        }
     } else $errors['file'] = 'Загрузите изображение';
     // Действия по результату валидации
     if (!empty($errors)) {
